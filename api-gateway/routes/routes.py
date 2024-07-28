@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.models import User, AuctionItem, Bid
+from models.user import User
 from db.database import db
 from flask_login import login_user, logout_user, current_user
 from datetime import datetime, timedelta
