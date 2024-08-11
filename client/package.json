@@ -1,5 +1,5 @@
 {
-  "name": "Murphy-auctioneers-admin",
+  "name": "Zora-System",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
+    "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@uploadthing/react": "^6.7.2",
     "apexcharts": "^3.45.2",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
@@ -27,7 +30,9 @@
     "react-select": "^5.8.0",
     "react-table": "^7.8.0",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^6.13.2",
+    "use-debounce": "^10.0.2"
   },
   "devDependencies": {
     "@types/node": "^20",

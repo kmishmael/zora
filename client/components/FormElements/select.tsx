@@ -2,20 +2,28 @@
 import React, { useState } from "react";
 
 interface SelectProps {
+  label: string;
+  placeholder: string;
+  options: { name: string; value: any }[];
   selectedOption: string;
-  setSelectedOption: React.Dispatch<React.SetStateAction<string>>
+  setSelectedOption: React.Dispatch<React.SetStateAction<any>>;
 }
-const SelectGroupOne: React.FC<any> = ({selectedOption, setSelectedOption}) => {
+const SelectOption: React.FC<SelectProps> = ({
+  label,
+  placeholder,
+  options,
+  selectedOption,
+  setSelectedOption,
+}) => {
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
-
   return (
     <div className="mb-4.5">
       <label className="mb-3 block text-body-sm text-dark dark:text-white">
-        Subject
+        {label}
       </label>
 
       <div className="relative z-20 bg-transparent dark:bg-dark-2">
@@ -30,17 +38,13 @@ const SelectGroupOne: React.FC<any> = ({selectedOption, setSelectedOption}) => {
           }`}
         >
           <option value="" disabled className="text-dark-6">
-            Select your subject
+            {placeholder}
           </option>
-          <option value="USA" className="text-dark-6">
-            USA
-          </option>
-          <option value="UK" className="text-dark-6">
-            UK
-          </option>
-          <option value="Canada" className="text-dark-6">
-            Canada
-          </option>
+          {options.map((option) => (
+            <option key={option.name} value={option.value} className="text-dark-6">
+              {option.name}
+            </option>
+          ))}
         </select>
 
         <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
@@ -63,4 +67,4 @@ const SelectGroupOne: React.FC<any> = ({selectedOption, setSelectedOption}) => {
   );
 };
 
-export default SelectGroupOne;
+export default SelectOption;

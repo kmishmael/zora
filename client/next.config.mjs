@@ -10,6 +10,9 @@ const nextConfig = {
     domains: ["localhost"],
     remotePatterns: [
       {
+        hostname: "utfs.io"
+      },
+      {
         protocol: "https",
         hostname: "cdn.sanity.io",
         port: ""

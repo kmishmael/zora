@@ -5,7 +5,7 @@ interface SelectProps {
   selectedOption: string;
   setSelectedOption: React.Dispatch<React.SetStateAction<string>>
 }
-const SelectGroupOne: React.FC<any> = ({selectedOption, setSelectedOption}) => {
+const SelectCategory: React.FC<SelectProps> = ({selectedOption, setSelectedOption}) => {
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const changeTextColor = () => {
@@ -15,7 +15,7 @@ const SelectGroupOne: React.FC<any> = ({selectedOption, setSelectedOption}) => {
   return (
     <div className="mb-4.5">
       <label className="mb-3 block text-body-sm text-dark dark:text-white">
-        Subject
+        Category
       </label>
 
       <div className="relative z-20 bg-transparent dark:bg-dark-2">
@@ -63,4 +63,4 @@ const SelectGroupOne: React.FC<any> = ({selectedOption, setSelectedOption}) => {
   );
 };
 
-export default SelectGroupOne;
+export default SelectCategory;

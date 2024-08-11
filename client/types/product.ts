@@ -1,8 +1,18 @@
+import { Category } from "./category";
+import  { ProductImage } from "./productImage";
+
 export type Product = {
-  image: string;
+  id: number;
+  category: Category;
   name: string;
-  category: string;
+  description: string;
+  images: ProductImage[];
   price: number;
-  sold: number;
-  profit: number;
-};
+}
+
+export type Products = {
+  current_page: number;
+  pages: number;
+  products: Product[];
+  total: number;
+}

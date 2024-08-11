@@ -7,8 +7,10 @@ const api = axios.create({
 
 api.interceptors.request.use(async (config: any) => {
     const session = await getSession();
-    config.headers.Authorization = `Bearer ${session?.accessToken}`
+   // config.headers.Authorization = `Bearer ${session?.accessToken}`
     return config
 })
+
+console.log("usrl", process.env.NEXT_PUBLIC_API_URL)
 
 export default api;
