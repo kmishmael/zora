@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import api from "@/lib/axios/private";
 import { useRouter } from "next/navigation";
+import { Product } from "@/types/product";
 
 type FormInputs = {
   name: string;
@@ -24,9 +25,11 @@ type IFormInputs = {
   images: string[];
 };
 
-export default function ProductCreate({
+export default function ProductUpdate({
   categories,
+  product,
 }: {
+  product: Product;
   categories: Categories["categories"];
 }) {
   let categoryOptions = categories.map((category) => {
@@ -36,9 +39,13 @@ export default function ProductCreate({
     };
   });
 
-  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [selectedOption, setSelectedOption] = useState<number>(
+    product.category?.id ? product.category.id : 0,
+  );
   const [sError, setSError] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>(
+    product.images.map((image) => image.url),
+  );
 
   const router = useRouter();
 
@@ -65,15 +72,14 @@ export default function ProductCreate({
       images: images,
     };
     console.log(uploadData);
-    const result = (await api.post("/products", uploadData)).status;
+    const result = (await api.put(`/products/${product.id}`, uploadData)).status;
 
-    // TODO: Add a Toast here
-    if (result == 201) {
-      console.log("upload successfule");
-      router.push("/products");
-    } else {
-      alert("something went wrong");
-    }
+    // TODO: Add a toast here
+    // if (result == 201) {
+    //   router.push("/products");
+    // } else {
+    //   alert("something went wrong");
+    // }
   };
 
   return (
@@ -90,6 +96,7 @@ export default function ProductCreate({
             </label>
             <input
               {...register("name")}
+              defaultValue={product.name}
               placeholder="Enter product name"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
@@ -117,6 +124,7 @@ export default function ProductCreate({
             </label>
             <input
               {...register("price", { required: true })}
+              defaultValue={product.price}
               type="number"
               name="price"
               placeholder="Enter the price"
@@ -130,6 +138,7 @@ export default function ProductCreate({
             </label>
             <textarea
               {...register("description", { required: true })}
+              defaultValue={product.description}
               rows={6}
               placeholder="Product Description"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
@@ -183,10 +192,7 @@ export default function ProductCreate({
             <UploadDropzone
               endpoint="imageUploader"
               onClientUploadComplete={(res) => {
-                // Do something with the response
-                console.log("Files: ", res);
                 setImages([...images, res[0].url]);
-                //alert("Upload Completed");
               }}
               onUploadError={(error: Error) => {
                 // Do something with the error.
@@ -202,7 +208,6 @@ export default function ProductCreate({
           >
             Add Product
           </button>
-        
         </div>
       </form>
     </div>

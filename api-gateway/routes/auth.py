@@ -46,7 +46,7 @@ def signup():
     if User.query.filter_by(email=email).first():
         return jsonify({'message': 'Email already in use'}), 400
 
-    new_user = User(name=name, email=email, password=password, role=UserRole.SALESPERSON.value)
+    new_user = User(name=name, email=email, password=password, role=UserRole.BASIC.value)
 
     db.session.add(new_user)
     db.session.commit()

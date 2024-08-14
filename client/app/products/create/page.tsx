@@ -4,9 +4,10 @@ import { Suspense } from "react";
 import ProductCreate from "@/components/Products/ProductCreate";
 import api from "@/lib/axios/private";
 import { Categories } from "@/types/category";
+import Loader from "@/components/common/Loader";
 
 export default async function Page() {
-  const categories = await (await api.get<Categories>("/categories")).data;
+  const categories = (await api.get<Categories>("/categories")).data;
   return (
     <DefaultLayout>
       <div className="mx-auto w-full max-w-[1080px]">
@@ -14,7 +15,11 @@ export default async function Page() {
 
         <br />
         <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
-          <Suspense fallback={<>Loading...</>}>
+          <Suspense fallback={
+             <div className="">
+             <Loader />
+           </div>
+          }>
             <ProductCreate categories={categories.categories} />
           </Suspense>
         </div>

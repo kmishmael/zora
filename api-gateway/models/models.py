@@ -8,6 +8,7 @@ from datetime import datetime
 class UserRole(enum.Enum):
     MANAGER = "manager"
     SALESPERSON = "salesperson"
+    BASIC = "basic"
 
 
 class User(db.Model):
@@ -54,7 +55,7 @@ class User(db.Model):
 
 class Product(db.Model):
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), unique=True, nullable=False)
+    name = Column(String(100), unique=False, nullable=False)
     price = Column(Float, nullable=False)
     description = Column(Text, nullable=True)
     category_id = Column(Integer, db.ForeignKey('category.id'), nullable=False)
@@ -72,14 +73,15 @@ class Product(db.Model):
             'name': self.name,
             'price': self.price,
             'description': self.description,
-            'category_id': self.category_id,
+            'category': self.category.to_dict(),
+            'images': [image.to_dict() for image in self.images]
         }
 
 
 class ProductImage(db.Model):
     id = Column(Integer, primary_key=True)
     product_id = Column(Integer, db.ForeignKey('product.id'), nullable=False)
-    image_url = Column(String(200), nullable=False)
+    url = Column(String(200), nullable=False)
 
     product = relationship('Product', back_populates='images')
 
@@ -90,13 +92,13 @@ class ProductImage(db.Model):
         return {
             'id': self.id,
             'product_id': self.product_id,
-            'image_url': self.image_url,
+            'url': self.url,
         }
 
 
 class Branch(db.Model):
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), unique=True, nullable=False)
+    name = Column(String(100), unique=False, nullable=False)
     address = Column(String(200), nullable=False)
 
     users = relationship('User', back_populates='branch')

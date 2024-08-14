@@ -4,14 +4,16 @@ import React, { useState } from "react";
 interface SelectProps {
   label: string;
   placeholder: string;
-  options: { name: string; value: any }[];
-  selectedOption: string;
+  options: { name: string; value: number }[];
+  selectedOption: number;
+  sError: any;
   setSelectedOption: React.Dispatch<React.SetStateAction<any>>;
 }
 const SelectOption: React.FC<SelectProps> = ({
   label,
   placeholder,
   options,
+  sError,
   selectedOption,
   setSelectedOption,
 }) => {
@@ -21,7 +23,7 @@ const SelectOption: React.FC<SelectProps> = ({
     setIsOptionSelected(true);
   };
   return (
-    <div className="mb-4.5">
+    <div className="mb-[2px]">
       <label className="mb-3 block text-body-sm text-dark dark:text-white">
         {label}
       </label>
@@ -31,17 +33,26 @@ const SelectOption: React.FC<SelectProps> = ({
           value={selectedOption}
           onChange={(e) => {
             setSelectedOption(e.target.value);
+            if (e.target.value == '0') {
+              sError(true);
+            } else {
+                sError(false)
+            }
             changeTextColor();
           }}
           className={`relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary ${
             isOptionSelected ? "text-dark dark:text-white" : ""
           }`}
         >
-          <option value="" disabled className="text-dark-6">
+          <option value={0} className="text-dark-6">
             {placeholder}
           </option>
           {options.map((option) => (
-            <option key={option.name} value={option.value} className="text-dark-6">
+            <option
+              key={option.name}
+              value={option.value}
+              className="text-dark-6"
+            >
               {option.name}
             </option>
           ))}

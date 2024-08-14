@@ -7,8 +7,8 @@ category_bp = Blueprint('category', __name__)
 
 @category_bp.route('/categories', methods=['GET'])
 def get_categories():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
+    #page = request.args.get('page', 1, type=int)
+    #per_page = request.args.get('per_page', 10, type=int)
 
     name_filter = request.args.get('name')
 
@@ -17,13 +17,13 @@ def get_categories():
     if name_filter:
         query = query.filter(Category.name.ilike(f"%{name_filter}%"))
 
-    categories = query.paginate(page=page, per_page=per_page, error_out=False)
+    categories = query.all()#.paginate(page=page, per_page=per_page, error_out=False)
 
     return jsonify({
-        'categories': [category.to_dict() for category in categories.items],
-        'total': categories.total,
-        'pages': categories.pages,
-        'current_page': categories.page
+        'categories': [category.to_dict() for category in categories],
+        #'total': categories.total,
+        #'pages': categories.pages,
+        #'current_page': categories.page
     })
 
 
@@ -35,7 +35,9 @@ def get_category(id):
 
 @category_bp.route('/categories', methods=['POST'])
 def create_category():
-    data = request.json
+    print("djdjdj")
+    data = request.get_json()
+    print(data)
     new_category = Category(
         name=data['name']
     )

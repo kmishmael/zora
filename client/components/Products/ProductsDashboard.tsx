@@ -35,7 +35,7 @@ export default async function ProductDashboard() {
               <div className="h-12.5 w-15 rounded-md">
                 {product.images && product.images.length > 0 ? (
                   <Image
-                    src={product.images[0].image_url}
+                    src={product.images[0].url}
                     width={60}
                     height={50}
                     alt="Product"

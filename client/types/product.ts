@@ -3,7 +3,7 @@ import  { ProductImage } from "./productImage";
 
 export type Product = {
   id: number;
-  category: Category;
+  category?: Category;
   name: string;
   description: string;
   images: ProductImage[];

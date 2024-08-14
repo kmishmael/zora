@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.models import User, UserRole, Branch, Product, Category
+from models.models import User, UserRole, Branch, Product, Category, ProductImage
 from db.database import db
 import bcrypt
 from datetime import datetime, timedelta
@@ -45,14 +45,24 @@ def get_product(id):
 
 @product_bp.route('/products', methods=['POST'])
 def create_product():
-    data = request.json
+    data = request.get_json()
+    print(data)
     new_product = Product(
         name=data['name'],
         price=data['price'],
         description=data.get('description'),
-        category_id=data['category_id']
+        category_id=data.get('category')
     )
     db.session.add(new_product)
+    db.session.commit()
+
+    images = data.get("images", [])
+    for image in images:
+        new_image = ProductImage(
+            product_id=new_product.id,
+            url=image
+        )
+        db.session.add(new_image)
     db.session.commit()
     return jsonify(new_product.to_dict()), 201
 

@@ -11,14 +11,14 @@ def get_product_images():
     per_page = request.args.get('per_page', 10, type=int)
 
     product_id_filter = request.args.get('product_id', type=int)
-    image_url_filter = request.args.get('image_url')
+    url_filter = request.args.get('url')
 
     query = ProductImage.query
 
     if product_id_filter:
         query = query.filter(ProductImage.product_id == product_id_filter)
-    if image_url_filter:
-        query = query.filter(ProductImage.image_url.ilike(f"%{image_url_filter}%"))
+    if url_filter:
+        query = query.filter(ProductImage.url.ilike(f"%{url_filter}%"))
 
     product_images = query.paginate(page=page, per_page=per_page, error_out=False)
 
@@ -39,7 +39,7 @@ def create_product_image():
     data = request.json
     new_product_image = ProductImage(
         product_id=data['product_id'],
-        image_url=data['image_url']
+        url=data['url']
     )
     db.session.add(new_product_image)
     db.session.commit()
@@ -50,7 +50,7 @@ def update_product_image(id):
     product_image = ProductImage.query.get_or_404(id)
     data = request.json
     product_image.product_id = data.get('product_id', product_image.product_id)
-    product_image.image_url = data.get('image_url', product_image.image_url)
+    product_image.url = data.get('url', product_image.url)
 
     db.session.commit()
     return jsonify(product_image.to_dict())
