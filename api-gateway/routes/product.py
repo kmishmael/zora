@@ -76,11 +76,13 @@ def update_product(id):
     product.category_id = data.get('category_id', product.category_id)
 
     db.session.commit()
-    return jsonify(product.to_dict())
+    return jsonify(product.to_dict()), 204
 
 @product_bp.route('/products/<int:id>', methods=['DELETE'])
 def delete_product(id):
     product = Product.query.get_or_404(id)
+    for image in product.images:
+        db.session.delete(image)
     db.session.delete(product)
     db.session.commit()
     return jsonify({'message': 'Product deleted successfully'}), 204

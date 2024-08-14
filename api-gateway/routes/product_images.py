@@ -47,13 +47,14 @@ def create_product_image():
 
 @product_images_bp.route('/product-images/<int:id>', methods=['PUT'])
 def update_product_image(id):
+    print(id)
     product_image = ProductImage.query.get_or_404(id)
     data = request.json
     product_image.product_id = data.get('product_id', product_image.product_id)
     product_image.url = data.get('url', product_image.url)
 
     db.session.commit()
-    return jsonify(product_image.to_dict())
+    return jsonify(product_image.to_dict()), 200
 
 @product_images_bp.route('/product-images/<int:id>', methods=['DELETE'])
 def delete_product_image(id):
