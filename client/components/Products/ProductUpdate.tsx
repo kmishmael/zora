@@ -10,6 +10,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import api from "@/lib/axios/private";
 import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
+import { ProductImage } from "@/types/productImage";
+import { useToast } from "../ui/use-toast";
 
 type FormInputs = {
   name: string;
@@ -43,15 +45,20 @@ export default function ProductUpdate({
     product.category?.id ? product.category.id : 0,
   );
   const [sError, setSError] = useState(false);
-  const [images, setImages] = useState<string[]>(
-    product.images.map((image) => image.url),
-  );
+  const [images, setImages] = useState<ProductImage[]>(product.images);
 
   const router = useRouter();
 
-  function removeImage(image: string) {
-    let newImages = images.filter((img) => img != image);
-    setImages(newImages);
+  const { toast } = useToast();
+
+  async function removeImage(image: ProductImage) {
+    //let newImages = images.filter((img) => img != image);
+    const res = (await api.delete(`/product-images/${image.id}`)).status;
+    if (res == 200) {
+      let newImages = images.filter((img) => img != img);
+      setImages(newImages);
+    }
+    //setImages(newImages);
   }
 
   const {
@@ -69,18 +76,35 @@ export default function ProductUpdate({
     let uploadData = {
       ...data,
       category: selectedOption === 0 ? null : selectedOption,
-      images: images,
     };
     console.log(uploadData);
-    const result = (await api.put(`/products/${product.id}`, uploadData)).status;
+    const result = await api.put(`/products/${product.id}`, uploadData);
 
     // TODO: Add a toast here
-    // if (result == 201) {
-    //   router.push("/products");
-    // } else {
-    //   alert("something went wrong");
-    // }
+    if (result.status == 204) {
+      toast({
+        description: "Product updated successfully!",
+      });
+      router.push("/products");
+    } else {
+      console.log(result.data);
+      toast({
+        description: "Something went wrong.",
+      });
+    }
   };
+
+  async function handleImageUpload(image: string) {
+    const res = await api.post(`/product-images`, {
+      product_id: product.id,
+      url: image,
+    });
+
+    if (res.status == 201) {
+      let newImage = res.data;
+      setImages([...images, newImage]);
+    }
+  }
 
   return (
     <div className="rounded-[10px] border border-stroke bg-white shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card">
@@ -153,11 +177,11 @@ export default function ProductUpdate({
               <div className="flex flex-wrap sm:gap-8">
                 {images.map((image) => (
                   <div
-                    key={image}
+                    key={image.id}
                     className="relative rounded-lg border-2 border-blue-500 p-2"
                   >
                     <Image
-                      src={image}
+                      src={image.url}
                       height={100}
                       width={200}
                       className="h-[200px] object-contain"
@@ -174,13 +198,13 @@ export default function ProductUpdate({
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth={1.5}
                         stroke="currentColor"
                         className="h-4 w-4 "
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M6 18 18 6M6 6l12 12"
                         />
                       </svg>
@@ -192,7 +216,7 @@ export default function ProductUpdate({
             <UploadDropzone
               endpoint="imageUploader"
               onClientUploadComplete={(res) => {
-                setImages([...images, res[0].url]);
+                handleImageUpload(res[0].url);
               }}
               onUploadError={(error: Error) => {
                 // Do something with the error.
@@ -200,13 +224,12 @@ export default function ProductUpdate({
               }}
             />
           </div>
-
           <br />
           <button
             type="submit"
             className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
           >
-            Add Product
+            Update
           </button>
         </div>
       </form>

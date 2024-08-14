@@ -1,6 +1,5 @@
 import api from "@/lib/axios/private";
 import { Users } from "@/types/user";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { generateInitials } from "@/lib/utils";
 

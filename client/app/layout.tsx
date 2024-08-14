@@ -9,6 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
+import { Toaster } from "@/components/ui/toaster"
 
 export default function RootLayout({
   children,
@@ -36,7 +37,10 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        <SessionProvider>{loading ? <Loader /> : children}</SessionProvider>
+        <SessionProvider>
+          {loading ? <Loader /> : children}
+          <Toaster />
+        </SessionProvider>
       </body>
     </html>
   );

@@ -12,7 +12,6 @@ export default async function Page() {
     <DefaultLayout>
       <div className="mx-auto w-full max-w-[1080px]">
         <Breadcrumb pageName="Create New Product" />
-
         <br />
         <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
           <Suspense fallback={

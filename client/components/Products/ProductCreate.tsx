@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import api from "@/lib/axios/private";
 import { useRouter } from "next/navigation";
+import { useToast } from "../ui/use-toast";
 
 type FormInputs = {
   name: string;
@@ -53,12 +54,14 @@ export default function ProductCreate({
     watch,
     formState: { errors },
   } = useForm<FormInputs>();
+  const { toast } = useToast();
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     if (sError) {
       alert("Category cannot be empty");
       return;
     }
+
     let uploadData = {
       ...data,
       category: selectedOption === 0 ? null : selectedOption,
@@ -69,10 +72,15 @@ export default function ProductCreate({
 
     // TODO: Add a Toast here
     if (result == 201) {
-      console.log("upload successfule");
+      toast({
+        description: "Product created successfully!",
+      });
       router.push("/products");
+      router.refresh();
     } else {
-      alert("something went wrong");
+      toast({
+        description: "Something went wrong",
+      });
     }
   };
 
@@ -165,13 +173,13 @@ export default function ProductCreate({
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth={1.5}
                         stroke="currentColor"
                         className="h-4 w-4 "
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M6 18 18 6M6 6l12 12"
                         />
                       </svg>
@@ -202,7 +210,6 @@ export default function ProductCreate({
           >
             Add Product
           </button>
-        
         </div>
       </form>
     </div>
