@@ -1,13 +1,11 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import { Suspense } from "react";
-import ProductCreate from "@/components/Products/ProductCreate";
-import api from "@/lib/axios/private";
-import { Categories } from "@/types/category";
+import CategoryCreate from "@/components/Categories/CategoryCreate";
+
 import Loader from "@/components/common/Loader";
 
 export default async function Page() {
-  const categories = (await api.get<Categories>("/categories")).data;
   return (
     <DefaultLayout>
       <div className="mx-auto w-full max-w-[1080px]">
@@ -19,7 +17,7 @@ export default async function Page() {
              <Loader />
            </div>
           }>
-            <ProductCreate categories={categories.categories} />
+            <CategoryCreate />
           </Suspense>
         </div>
       </div>

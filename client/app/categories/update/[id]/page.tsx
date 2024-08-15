@@ -2,14 +2,13 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import { Suspense } from "react";
 import Loader from "@/components/common/Loader";
-import { Categories } from "@/types/category";
+import { Category } from "@/types/category";
 import api from "@/lib/axios/private";
-import ProductUpdate from "@/components/Products/ProductUpdate";
-import { Product } from "@/types/product";
+import CategoryUpdate from "@/components/Categories/CategoryUpdate";
 
 export default async function Page({ params }: { params: { id: number } }) {
-  const categories = (await api.get<Categories>("/categories")).data;
-  const product = (await api.get<Product>(`/products/${params.id}`)).data
+  const category = (await api.get<Category>(`/categories/${params.id}`)).data;
+
   return (
     <DefaultLayout>
       <div className="mx-auto w-full max-w-[1080px]">
@@ -23,7 +22,7 @@ export default async function Page({ params }: { params: { id: number } }) {
               </div>
             }
           >
-            <ProductUpdate categories={categories.categories} product={product} />
+            <CategoryUpdate category={category} />
           </Suspense>
         </div>
       </div>

@@ -1,11 +1,11 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import ProductDashboard from "@/components/Products/ProductsDashboard";
 import { Suspense } from "react";
 import Search from "@/components/search";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Loader from "@/components/common/Loader";
+import CategoryDashboard from "@/components/Categories/CategoryDashboard";
 
 export default function Page() {
   return (
@@ -31,7 +31,7 @@ export default function Page() {
               </div>
             }
           >
-            <BranchDashboard />
+            <CategoryDashboard />
           </Suspense>
         </div>
       </div>
