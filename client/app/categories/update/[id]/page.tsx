@@ -1,9 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import { Suspense } from "react";
-import Search from "@/components/search";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import Loader from "@/components/common/Loader";
 import { Categories } from "@/types/category";
 import api from "@/lib/axios/private";
@@ -16,7 +13,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   return (
     <DefaultLayout>
       <div className="mx-auto w-full max-w-[1080px]">
-        <Breadcrumb pageName="Branches" />
+        <Breadcrumb pageName="Categories" />
         <br />
         <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
           <Suspense
