@@ -38,7 +38,7 @@ def get_branch(id):
 
 @branch_bp.route('/branches', methods=['POST'])
 def create_branch():
-    data = request.json
+    data = request.get_json()
     new_branch = Branch(
         name=data['name'],
         address=data['address']
@@ -56,7 +56,7 @@ def update_branch(id):
     branch.address = data.get('address', branch.address)
 
     db.session.commit()
-    return jsonify(branch.to_dict())
+    return jsonify(branch.to_dict()), 204
 
 
 @branch_bp.route('/branches/<int:id>', methods=['DELETE'])

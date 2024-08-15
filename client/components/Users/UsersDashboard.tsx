@@ -2,6 +2,7 @@ import api from "@/lib/axios/private";
 import { Users } from "@/types/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { generateInitials } from "@/lib/utils";
+import RoleSelection from "./RoleSelection";
 
 export default async function UsersDashboard() {
   const usersData = (await api.get<Users>("/users")).data;
@@ -47,9 +48,12 @@ export default async function UsersDashboard() {
             </p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+
+          <RoleSelection currentRole={user.role} userId={user.id} />
+
+            {/* <p className="text-body-sm font-medium text-dark dark:text-dark-6">
               {user.role}
-            </p>
+            </p> */}
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-body-sm font-medium text-dark dark:text-dark-6">

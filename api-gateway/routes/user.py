@@ -73,7 +73,7 @@ def update_user(id):
     user.branch_id = data.get('branch_id', user.branch_id)
 
     db.session.commit()
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 204
 
 
 @user_bp.route('/users/<int:id>', methods=['DELETE'])
