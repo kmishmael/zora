@@ -4,20 +4,29 @@ import ChartThree from "../Charts/ChartThree";
 import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
-import MapOne from "../Maps/MapOne";
 import DataStatsOne from "@/components/DataStats/DataStatsOne";
 import ChartOne from "@/components/Charts/ChartOne";
+import Link from "next/link";
+import GlanceData from "./Glance";
 
-const Auctions: React.FC = () => {
+const MainDashboard: React.FC = () => {
   return (
     <>
-      <DataStatsOne />
+      <div className="flex justify-end py-2">
+        <Link href={"#"}>
+          <button className="rounded-lg bg-blue-600 px-4 py-2 text-white">
+            Sell
+          </button>
+        </Link>
+      </div>
+      {/* <DataStatsOne /> */}
+      <GlanceData />
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
         <ChartOne />
         <ChartTwo />
         <ChartThree />
-        {/* <MapOne /> */}
+
         <div className="col-span-12 xl:col-span-8">
           <TableOne />
         </div>
@@ -27,4 +36,4 @@ const Auctions: React.FC = () => {
   );
 };
 
-export default Auctions;
+export default MainDashboard;

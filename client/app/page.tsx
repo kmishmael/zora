@@ -1,6 +1,7 @@
-import Auctions from "@/components/Dashboard/auctions";
+import Auctions from "@/components/Dashboard";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
+import MainDashboard from "@/components/Dashboard";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function Home() {
   return (
     <>
       <DefaultLayout>
-        <Auctions />
+        <MainDashboard />
       </DefaultLayout>
     </>
   );
