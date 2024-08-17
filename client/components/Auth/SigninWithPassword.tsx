@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-//import { useToast } from "../ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
 export type FormData = {
   email: string;
@@ -18,11 +18,9 @@ export default function SigninWithPassword() {
   const { register, handleSubmit, reset } = useForm<FormData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  //const { toast } = useToast();
+  const { toast } = useToast();
 
   const handleCredentialLogin = async (data: FormData) => {
-    console.log(data);
-
     const res = await signIn("credentials", {
       ...data,
       redirect: false,
@@ -30,8 +28,10 @@ export default function SigninWithPassword() {
 
     if (res) {
       if (res.ok) {
-        console.log(res);
-        router.push(res.url || '/');
+        toast({
+          description: "Login Successful",
+        });
+        router.push("/");
       } else {
         router.push(`/auth/login?error=${res.error}`);
       }
@@ -41,11 +41,11 @@ export default function SigninWithPassword() {
   async function onSubmit(data: FormData) {
     if (isLoading) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     await handleCredentialLogin(data).finally(() => {
-      setIsLoading(false)
-    })
+      setIsLoading(false);
+    });
   }
 
   return (

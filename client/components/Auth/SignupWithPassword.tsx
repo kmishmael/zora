@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axios/private";
+import { useToast } from "../ui/use-toast";
+import { AxiosError } from "axios";
 //import { useToast } from "../ui/use-toast";
 
 export type FormData = {
@@ -18,23 +21,31 @@ export default function SignupWithPassword() {
   });
   const { register, handleSubmit, reset } = useForm<FormData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const router = useRouter();
+  const { toast } = useToast();
   //const { toast } = useToast();
 
   const handleCredentialLogin = async (data: FormData) => {
-    console.log(data);
-
-    const res = await signIn("credentials", {
-      ...data,
-      redirect: false,
-    });
-
-    if (res) {
-      if (res.ok) {
-        console.log(res);
-        router.push(res.url || "/");
+    try {
+      const result = (await api.post("/signup", data)).status;
+      toast({
+        description: "User Created Successfully! Please login.",
+      });
+      setTimeout(() => {}, 4000);
+      router.push(`/auth/login`);
+    } catch (error: any) {
+      let status = error.response.status;
+      if (status == 504) {
+        reset({ email: undefined, name: undefined, password: undefined });
+        toast({
+          description: "Email already in use",
+        });
       } else {
-        router.push(`/auth/login?error=${res.error}`);
+        reset({ email: undefined, name: undefined, password: undefined });
+        toast({
+          description: "An unknow error occured",
+        });
       }
     }
   };

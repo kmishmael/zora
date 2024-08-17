@@ -1,7 +1,11 @@
 import CredentialsProvider from "next-auth/providers/credentials"
-import { NextAuthOptions } from 'next-auth';
+import NextAuth from 'next-auth';
 
-export const authOptions: NextAuthOptions = {
+
+export const {
+    handlers: { GET, POST },
+    auth,
+} = NextAuth({
     pages: {
         signIn: '/auth/login'
     },
@@ -64,4 +68,4 @@ export const authOptions: NextAuthOptions = {
         maxAge: 30 * 24 * 60 * 60, // 30 Days
     },
 
-}
+})

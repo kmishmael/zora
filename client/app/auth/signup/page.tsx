@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Signup from "@/components/Auth/Signup";
 import Link from "next/link";
 
@@ -10,8 +9,6 @@ export default function Page({
 }) {
   return (
     <>
-      {/* <Breadcrumb pageName="Sign In" /> */}
-
       <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="flex flex-wrap items-center">
           <div className="w-full xl:w-1/2">

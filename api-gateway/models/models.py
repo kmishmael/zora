@@ -14,7 +14,6 @@ class UserRole(enum.Enum):
 class User(db.Model):
     id = Column(db.Integer, primary_key=True)
     name = Column(String(80), unique=False, nullable=False)
-    # username = Column(db.String(80), unique=True, nullable=False)
     email = Column(String(120), unique=True, nullable=False)
     password = Column(db.String(200), nullable=False)
     created_on = Column(DateTime, nullable=False, default=datetime.now())

@@ -27,7 +27,7 @@
     "jsvectormap": "^1.5.3",
     "lucide-react": "^0.408.0",
     "next": "^14.2.5",
-    "next-auth": "^4.24.7",
+    "next-auth": "^5.0.0-beta.20",
     "react": "^18",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18",

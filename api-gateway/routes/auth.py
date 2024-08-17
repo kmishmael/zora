@@ -44,7 +44,7 @@ def signup():
     password = data.get('password')
 
     if User.query.filter_by(email=email).first():
-        return jsonify({'message': 'Email already in use'}), 400
+        return jsonify({'message': 'Email already in use'}), 504
 
     new_user = User(name=name, email=email, password=password, role=UserRole.BASIC.value)
 
