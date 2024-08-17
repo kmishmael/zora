@@ -67,7 +67,6 @@ export default function ProductCreate({
       category: selectedOption === 0 ? null : selectedOption,
       images: images,
     };
-    console.log(uploadData);
     const result = (await api.post("/products", uploadData)).status;
 
     // TODO: Add a Toast here
