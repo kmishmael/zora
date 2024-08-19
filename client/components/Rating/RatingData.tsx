@@ -3,6 +3,7 @@
 import { useState } from "react";
 import api from "@/lib/axios/private";
 import { Sale } from "@/types/sales";
+import Link from "next/link";
 
 export default function RatingData({ salesData }: { salesData: Sale }) {
   const [rating, setRating] = useState(0);
@@ -32,13 +33,18 @@ export default function RatingData({ salesData }: { salesData: Sale }) {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center border border-red-700 p-6">
+      <Link href="/" className="text-4xl font-bold text-blue-600">
+        Zora System
+      </Link>
+      <br />
       {!submitted ? (
         <h1 className="mb-4 text-3xl font-bold">
-          Hi {salesData.customer_name}, Rate Your Experience
+          Hi <span className="text-primary">{salesData.customer_name}</span>,
+          Rate Your Experience
         </h1>
       ) : (
         <h1 className="mb-4 text-3xl font-bold">
-          Hi {salesData.customer_name}
+          Hi <span className="text-primary">{salesData.customer_name}</span>
         </h1>
       )}
 
@@ -49,7 +55,7 @@ export default function RatingData({ salesData }: { salesData: Sale }) {
             {[1, 2, 3, 4, 5].map((star) => (
               <svg
                 key={star}
-                className={`h-10 w-10 cursor-pointer ${rating >= star ? "text-yellow-500" : "text-gray-300"}`}
+                className={`h-10 w-10 cursor-pointer ${rating >= star ? "text-primary" : "text-gray-300"}`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +77,7 @@ export default function RatingData({ salesData }: { salesData: Sale }) {
               onChange={(e) => setComment(e.target.value)}
               rows={6}
               placeholder="Enter your feedback (optional)"
-              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+              className="w-full rounded-[7px] border-2 border-neutral-900 bg-transparent px-5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             ></textarea>
           </div>
 

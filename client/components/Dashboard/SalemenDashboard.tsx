@@ -52,29 +52,52 @@ export default async function SalesmenDashboard() {
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Sales Target</div>
-              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+              <div className="text-2xl font-bold">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "KES",
-                }).format(dashboardData.sales_target)}</div>
-              <div className="text-xs text-muted-foreground">{Math.floor((dashboardData.sales_target / dashboardData.total_sales) * 100)}% achieved</div>
+                }).format(dashboardData.sales_target)}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {Math.floor(
+                  (dashboardData.sales_target / dashboardData.total_sales) *
+                    100,
+                )}
+                % achieved
+              </div>
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
-              <div className="text-muted-foreground">Commission</div>
-              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "KES",
-                }).format(dashboardData.total_commission)}</div>
+              <div className="text-muted-foreground">Average Rating</div>
+              <div className="text-2xl font-bold">
+                {Number(dashboardData.average_rating).toFixed(1)}
+              </div>
               {/* <div className="text-xs text-muted-foreground">+20% YoY</div> */}
             </div>
           </div>
           <Separator className="my-6" />
           <div className="grid grid-cols-3 gap-4">
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
-              <div className="text-muted-foreground">Incentives</div>
-              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+              <div className="text-muted-foreground">Commission</div>
+              <div className="text-2xl font-bold">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "KES",
-                }).format(dashboardData.total_earned_incentives)}</div>
+                }).format(dashboardData.total_commission)}
+              </div>
+              {/* <div className="text-xs text-muted-foreground">+20% YoY</div> */}
+            </div>
+
+            <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
+              <div className="text-muted-foreground">Incentives</div>
+              <div className="text-2xl font-bold">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_earned_incentives)}
+              </div>
               {/* <div className="text-xs text-muted-foreground">+10% YoY</div> */}
             </div>
             {/* <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
@@ -120,7 +143,13 @@ export default async function SalesmenDashboard() {
           <CardDescription>Sales performance over time</CardDescription>
         </CardHeader>
         <CardContent>
-          <LinechartChart data={dashboardData.sales_trend} xdataKey="total_sales" ydataKey="total_sales" label="Date" className="aspect-[9/4]" />
+          <LinechartChart
+            data={dashboardData.sales_trend}
+            xdataKey="total_sales"
+            ydataKey="total_sales"
+            label="Date"
+            className="aspect-[9/4]"
+          />
         </CardContent>
       </Card>
       <Card className="col-span-1">
@@ -132,26 +161,35 @@ export default async function SalesmenDashboard() {
           <div className="grid gap-4">
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Commission</div>
-              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+              <div className="text-2xl font-bold">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "KES",
-                }).format(dashboardData.total_commission)}</div>
+                }).format(dashboardData.total_commission)}
+              </div>
               {/* <div className="text-xs text-muted-foreground">+20% YoY</div> */}
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Incentives Earned</div>
-              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+              <div className="text-2xl font-bold">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "KES",
-                }).format(dashboardData.total_earned_incentives)}</div>
+                }).format(dashboardData.total_earned_incentives)}
+              </div>
               {/* <div className="text-xs text-muted-foreground">+10% YoY</div> */}
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Potential Incentives</div>
-              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+              <div className="text-2xl font-bold">
+                {" "}
+                {new Intl.NumberFormat("en-US", {
                   style: "currency",
                   currency: "KES",
-                }).format(dashboardData.total_potential_incentives)}</div>
+                }).format(dashboardData.total_potential_incentives)}
+              </div>
               {/* <div className="text-xs text-muted-foreground">+10% YoY</div> */}
             </div>
           </div>

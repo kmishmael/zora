@@ -129,6 +129,8 @@ const LeaderBoardPerformance = ({ data }: { data: DashboardData }) => {
               <TableHead>Salesman</TableHead>
               <TableHead>Branch</TableHead>
               <TableHead>Total Sales</TableHead>
+              <TableHead>Average Rating</TableHead>
+
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -138,6 +140,7 @@ const LeaderBoardPerformance = ({ data }: { data: DashboardData }) => {
                 <TableCell>{p.salesman}</TableCell>
                 <TableCell>{p.branch_name}</TableCell>
                 <TableCell>{p.total_sales}</TableCell>
+                <TableCell>{Number(p.average_rating).toFixed(1)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

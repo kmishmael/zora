@@ -15,6 +15,7 @@ export type DashboardData = {
         rank: number;
         salesman: string;
         total_sales: string;
+        average_rating: number;
     }[];
     salesmenPerformance: {
         branch_name: string,
@@ -55,5 +56,6 @@ export type SalesDashboardData = {
     total_commission: number,
     total_sales: number,
     total_potential_incentives: number,
-    total_earned_incentives: number
+    total_earned_incentives: number,
+    average_rating: number
 }

@@ -8,6 +8,7 @@ import SelectProduct from "./SelectProduct";
 import { useState } from "react";
 import { Product } from "@/types/product";
 import { useSession } from "next-auth/react";
+import { Sale } from "@/types/sales";
 
 type FormInputs = {
   name: string;
@@ -44,18 +45,19 @@ export default function SalesCreate({ products }: { products: Product[] }) {
       total_price: selectedProduct.price * data.quantity,
     };
 
-    const result = (await api.post("/sales", uploadData)).status;
+    const result = (await api.post<Sale>("/sales", uploadData));
 
     // TODO: Add a Toast here
-    if (result == 201) {
+    if (result.status == 201) {
       toast({
         description: "Sales created successfully!",
       });
-      router.push("/");
-      router.refresh();
+      router.push(`/rate/prompt/${result.data.id}`);
+      // router.refresh();
     } else {
       toast({
         description: "Something went wrong",
+        variant: "destructive"
       });
     }
   };

@@ -17,7 +17,7 @@ export default function PromptData({ saleData }: { saleData: Sale }) {
   };
 
   const handleShare = async () => {
-    let shareUrl  = `https://localhost:3000/rate/sale/${saleData.id}`
+    let shareUrl  = `http://localhost:3000/rate/sale/${saleData.id}`
     if (navigator.share) {
       try {
         await navigator.share({
@@ -67,7 +67,7 @@ export default function PromptData({ saleData }: { saleData: Sale }) {
           <QRCode
             size={512}
             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-            value={`https://localhost:3000/rate/sale/${saleData.id}`}
+            value={`http://localhost:3000/rate/sale/${saleData.id}`}
             viewBox={`0 0 256 256`}
           />
         </div>
