@@ -19,7 +19,7 @@ export default async function SalesmenDashboard() {
   //const { data: session, status } = useSession();
   const session = await auth();
   if (!session) {
-    redirect("/auth/login")
+    redirect("/auth/login");
   }
   const response = await api.get<SalesDashboardData>(
     `/sales/dashboard/salesman/${session?.user.id}`,
@@ -42,28 +42,42 @@ export default async function SalesmenDashboard() {
           <div className="grid grid-cols-3 gap-4">
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Total Sales</div>
-              <div className="text-2xl font-bold">$250,000</div>
-              <div className="text-xs text-muted-foreground">+15% YoY</div>
+              <div className="text-2xl font-bold">
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_sales)}
+              </div>
+              {/* <div className="text-xs text-muted-foreground">+15% YoY</div> */}
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Sales Target</div>
-              <div className="text-2xl font-bold">$300,000</div>
-              <div className="text-xs text-muted-foreground">80% achieved</div>
+              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.sales_target)}</div>
+              <div className="text-xs text-muted-foreground">{Math.floor((dashboardData.sales_target / dashboardData.total_sales) * 100)}% achieved</div>
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Commission</div>
-              <div className="text-2xl font-bold">$25,000</div>
-              <div className="text-xs text-muted-foreground">+20% YoY</div>
+              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_commission)}</div>
+              {/* <div className="text-xs text-muted-foreground">+20% YoY</div> */}
             </div>
           </div>
           <Separator className="my-6" />
           <div className="grid grid-cols-3 gap-4">
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Incentives</div>
-              <div className="text-2xl font-bold">$5,000</div>
-              <div className="text-xs text-muted-foreground">+10% YoY</div>
+              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_earned_incentives)}</div>
+              {/* <div className="text-xs text-muted-foreground">+10% YoY</div> */}
             </div>
-            <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
+            {/* <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Leads Generated</div>
               <div className="text-2xl font-bold">250</div>
               <div className="text-xs text-muted-foreground">+20% YoY</div>
@@ -72,7 +86,7 @@ export default async function SalesmenDashboard() {
               <div className="text-muted-foreground">Conversion Rate</div>
               <div className="text-2xl font-bold">40%</div>
               <div className="text-xs text-muted-foreground">+5% YoY</div>
-            </div>
+            </div> */}
           </div>
         </CardContent>
         <CardFooter>
@@ -106,7 +120,7 @@ export default async function SalesmenDashboard() {
           <CardDescription>Sales performance over time</CardDescription>
         </CardHeader>
         <CardContent>
-          <LinechartChart className="aspect-[9/4]" />
+          <LinechartChart data={dashboardData.sales_trend} xdataKey="total_sales" ydataKey="total_sales" label="Date" className="aspect-[9/4]" />
         </CardContent>
       </Card>
       <Card className="col-span-1">
@@ -118,18 +132,32 @@ export default async function SalesmenDashboard() {
           <div className="grid gap-4">
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
               <div className="text-muted-foreground">Commission</div>
-              <div className="text-2xl font-bold">$25,000</div>
-              <div className="text-xs text-muted-foreground">+20% YoY</div>
+              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_commission)}</div>
+              {/* <div className="text-xs text-muted-foreground">+20% YoY</div> */}
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
-              <div className="text-muted-foreground">Incentives</div>
-              <div className="text-2xl font-bold">$5,000</div>
-              <div className="text-xs text-muted-foreground">+10% YoY</div>
+              <div className="text-muted-foreground">Incentives Earned</div>
+              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_earned_incentives)}</div>
+              {/* <div className="text-xs text-muted-foreground">+10% YoY</div> */}
+            </div>
+            <div className="flex flex-col gap-2 rounded-lg bg-card p-4">
+              <div className="text-muted-foreground">Potential Incentives</div>
+              <div className="text-2xl font-bold">  {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "KES",
+                }).format(dashboardData.total_potential_incentives)}</div>
+              {/* <div className="text-xs text-muted-foreground">+10% YoY</div> */}
             </div>
           </div>
         </CardContent>
       </Card>
-      <Card className="col-span-1 lg:col-span-2">
+      {/* <Card className="col-span-1 lg:col-span-2">
         <CardHeader>
           <CardTitle>Leads and Conversion</CardTitle>
           <CardDescription>
@@ -150,7 +178,7 @@ export default async function SalesmenDashboard() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 }

@@ -53,5 +53,7 @@ export type SalesDashboardData = {
         total_sales: number
     }[],
     total_commission: number,
-    total_sales: number
+    total_sales: number,
+    total_potential_incentives: number,
+    total_earned_incentives: number
 }

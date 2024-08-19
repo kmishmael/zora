@@ -12,21 +12,14 @@ export function LinechartChart(props: any) {
         <ChartContainer
           config={{
             desktop: {
-              label: "Desktop",
+              label: props.label as string,
               color: "hsl(var(--chart-1))",
             },
           }}
         >
           <LineChart
             accessibilityLayer
-            data={[
-              { month: "January", desktop: 186 },
-              { month: "February", desktop: 305 },
-              { month: "March", desktop: 237 },
-              { month: "April", desktop: 73 },
-              { month: "May", desktop: 209 },
-              { month: "June", desktop: 214 },
-            ]}
+            data={props.data}
             margin={{
               left: 12,
               right: 12,
@@ -34,22 +27,22 @@ export function LinechartChart(props: any) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey={props.xdataKey}
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+            //  tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey={props.ydataKey}
               type="natural"
               stroke="var(--color-desktop)"
               strokeWidth={2}
-              dot={false}
+              dot={true}
             />
           </LineChart>
         </ChartContainer>
