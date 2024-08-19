@@ -3,9 +3,12 @@ import { Users } from "@/types/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { generateInitials } from "@/lib/utils";
 import RoleSelection from "./RoleSelection";
+import { Branches } from "@/types/branch";
+import BranchSelection from "./BranchSelection";
 
 export default async function UsersDashboard() {
   const usersData = (await api.get<Users>("/users")).data;
+  const branchData = (await api.get<Branches>("/branches")).data;
 
   return (
     <>
@@ -26,7 +29,7 @@ export default async function UsersDashboard() {
 
       {usersData.users.map((user, key) => (
         <div
-          className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-8 md:px-6 2xl:px-7.5"
+          className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-9 md:px-6 2xl:px-7.5"
           key={key}
         >
           <div className="col-span-3 flex items-center">
@@ -47,18 +50,19 @@ export default async function UsersDashboard() {
               {user.email}
             </p>
           </div>
-          <div className="col-span-1 flex items-center">
-
-          <RoleSelection currentRole={user.role} userId={user.id} />
+          <div className="col-span-2 flex items-center">
+            <RoleSelection currentRole={user.role} userId={user.id} />
 
             {/* <p className="text-body-sm font-medium text-dark dark:text-dark-6">
               {user.role}
             </p> */}
           </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-              {user.branch_id}
-            </p>
+          <div className="col-span-2 flex items-center">
+            <BranchSelection
+              branches={branchData.branches}
+              currentBranch={user.branch_id || 0}
+              userId={user.id}
+            />
           </div>
         </div>
       ))}

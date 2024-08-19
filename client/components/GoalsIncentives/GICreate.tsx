@@ -4,18 +4,19 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import api from "@/lib/axios/private";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
-import SelectProduct from "./SelectProduct";
+import SelectSalesman from "./SelectSalesman";
 import { useState } from "react";
-import { Product } from "@/types/product";
-import { useSession } from "next-auth/react";
+import { User } from "@/types/user";
 
 type FormInputs = {
-  name: string;
-  email: string;
-  quantity: number;
+  targetSales: number;
+  startDate: string;
+  endDate: string;
+  description: string;
+  incentiveAmount: number;
 };
 
-export default function SalesCreate({ products }: { products: Product[] }) {
+export default function GICreate({ users }: { users: User[] }) {
   const router = useRouter();
 
   const {
@@ -25,33 +26,29 @@ export default function SalesCreate({ products }: { products: Product[] }) {
     formState: { errors },
   } = useForm<FormInputs>();
   const { toast } = useToast();
-  const [selectedOption, setSelectedOption] = useState<number>(0);
-  const [productError, setProductError] = useState<boolean>(false);
 
-  const { data: session, status } = useSession();
+  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [sError, setSError] = useState(false);
+
+  let salesPeople = users.filter((user) => user.role == "salesperson");
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    let selectedProduct = products.filter(
-      (product: Product) => product.id == selectedOption,
-    )[0];
     let uploadData = {
-      customer_name: data.name,
-      user_id: session?.user.id,
-      customer_email: data.email,
-      quantity: data.quantity,
-      product_id: selectedProduct.id,
-      unit_price: selectedProduct.price,
-      total_price: selectedProduct.price * data.quantity,
+      user_id: salesPeople.filter((user) => user.id == selectedOption)[0].id,
+      target_sales: data.targetSales,
+      start_date: data.startDate,
+      end_date: data.endDate,
+      incentive_amount: data.incentiveAmount,
     };
-
-    const result = (await api.post("/sales", uploadData)).status;
+    console.log(uploadData)
+    const result = (await api.post("/performance_goals", uploadData)).status;
 
     // TODO: Add a Toast here
     if (result == 201) {
       toast({
-        description: "Sales created successfully!",
+        description: "Performance Goal created successfully!",
       });
-      router.push("/");
+      router.push("/goals-n-incentives");
       router.refresh();
     } else {
       toast({
@@ -64,98 +61,98 @@ export default function SalesCreate({ products }: { products: Product[] }) {
     <div className="rounded-[10px] border border-stroke bg-white shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card">
       <div className="border-b border-stroke px-6.5 py-4 dark:border-dark-3">
         <h3 className="font-semibold text-dark dark:text-white">
-          Register New Sale
+          New Goal & Incentive
         </h3>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="p-6.5">
-          <div className="mb-4.5">
-            <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-              Name
-              {true && <span className="text-red">*</span>}
-            </label>
-            <input
-              {...register("name", { required: true })}
-              placeholder="customer name"
-              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-            />
-          </div>
-
-          <div className="mb-4.5">
-            <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-              Email
-              {true && <span className="text-red">*</span>}
-            </label>
-            <input
-              {...register("email", { required: true })}
-              type="email"
-              name="email"
-              placeholder="Customer Email address"
-              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-            />
-          </div>
-
-          <SelectProduct
-            label="Product"
-            sError={setProductError}
-            options={products}
-            placeholder="Select Product"
+          <br />
+          <SelectSalesman
+            label="SalesPerson"
+            sError={setSError}
+            options={salesPeople}
+            placeholder="Select Salesperson"
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />
-          <div className="mb-4.5">
-            {productError && (
-              <span className="pl-4 text-sm text-red-600">
-                product is required
-              </span>
-            )}
-          </div>
+
+          <br />
 
           <div className="mb-4.5">
             <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-              Quantity
+              Target Sales
               {true && <span className="text-red">*</span>}
             </label>
             <input
-              {...register("quantity", { required: true })}
+              {...register("targetSales", { required: true })}
               type="number"
-              name="quantity"
-              defaultValue={1}
-              placeholder=""
+              placeholder="Target Sales Amount"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
+            {errors.targetSales && <>{errors.targetSales.message}</>}
           </div>
 
           <div className="mb-4.5">
             <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-              Price
+              Start Date
+              {true && <span className="text-red">*</span>}
             </label>
             <input
-              name="price"
-              value={
-                selectedOption != 0
-                  ? new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "KES",
-                    }).format(
-                      products.filter(
-                        (product) => product.id == selectedOption,
-                      )[0].price * watch("quantity"),
-                    )
-                  : undefined
-              }
-              disabled
-              placeholder="Not Selected"
+              {...register("startDate", { required: true })}
+              type="date"
+              placeholder="Start date"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
+            {errors.startDate && <>{errors.startDate.message}</>}
+          </div>
+          <div className="mb-4.5">
+            <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+              End Date
+              {true && <span className="text-red">*</span>}
+            </label>
+            <input
+              {...register("endDate", { required: true })}
+              type="date"
+              placeholder="End date"
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
+            {errors.endDate && <>{errors.endDate.message}</>}
+          </div>
+
+          <div className="mb-4.5">
+            <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+              Incentive Amount
+              {true && <span className="text-red">*</span>}
+            </label>
+            <input
+              {...register("incentiveAmount", { required: true })}
+              type="number"
+              defaultValue={0}
+              placeholder="Incentive Amount"
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
+            {errors.targetSales && <>{errors.targetSales.message}</>}
+          </div>
+          <div className="mb-6">
+            <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+              Description
+            </label>
+            <textarea
+              {...register("description")}
+              rows={6}
+              placeholder="Description"
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary disabled:cursor-default dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            ></textarea>
+            {errors.description && <>{errors.description.message}</>}
           </div>
           <br />
           <br />
+
           <button
             type="submit"
             className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
           >
-            Register a sale
+            Add Performance goal & Incentive
           </button>
         </div>
       </form>

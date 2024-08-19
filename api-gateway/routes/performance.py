@@ -56,7 +56,8 @@ def create_performance_goal():
         user_id=data['user_id'],
         target_sales=data['target_sales'],
         start_date=data['start_date'],
-        end_date=data['end_date']
+        end_date=data['end_date'],
+        incentive_amount=data['incentive_amount']
     )
     db.session.add(new_performance_goal)
     db.session.commit()

@@ -6,8 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DashboardData } from "@/types/dashboard";
 
-export default function GlanceData() {
+export default function GlanceData({data}: {data: DashboardData}) {
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -21,10 +22,10 @@ export default function GlanceData() {
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "KES",
-            }).format(1234567.89)}
+            }).format(data.totalSales)}
             </div>
             <p className="text-xs text-muted-foreground">
-              +10.2% from last month
+              +{data.percentageChange}% from last month
             </p>
           </CardContent>
         </Card>
@@ -38,10 +39,10 @@ export default function GlanceData() {
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "KES",
-            }).format(1500000)}
+            }).format(data.totalSalesTarget)}
             </div>
             <p className="text-xs text-muted-foreground">
-              85% of target achieved
+             {Math.floor((data.totalSales / data.totalSalesTarget) * 100)}% of target achieved
             </p>
           </CardContent>
         </Card>
@@ -51,8 +52,8 @@ export default function GlanceData() {
             <BarChartIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+15%</div>
-            <p className="text-xs text-muted-foreground">from last quarter</p>
+            <div className="text-2xl font-bold">+{data.percentageChange}%</div>
+            <p className="text-xs text-muted-foreground">from last month</p>
           </CardContent>
         </Card>
         <Card>
@@ -61,8 +62,11 @@ export default function GlanceData() {
             <TrophyIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">John Doe</div>
-            <p className="text-xs text-muted-foreground">$250,000 in sales</p>
+            <div className="text-2xl font-bold">{data.topSalesman.name}</div>
+            <p className="text-xs text-muted-foreground">{new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "KES",
+            }).format(data.topSalesman.total_sales)} in sales</p>
           </CardContent>
         </Card>
       </div>

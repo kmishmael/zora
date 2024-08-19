@@ -1,16 +1,16 @@
 "use client";
-import { Product } from "@/types/product";
+import { User } from "@/types/user";
 import React, { useState } from "react";
 
 interface SelectProps {
   label: string;
   placeholder: string;
-  options: Product[];
+  options: User[];
   selectedOption: number;
   sError: any;
   setSelectedOption: React.Dispatch<React.SetStateAction<any>>;
 }
-const SelectProduct: React.FC<SelectProps> = ({
+const SelectSaleman: React.FC<SelectProps> = ({
   label,
   placeholder,
   options,
@@ -34,10 +34,10 @@ const SelectProduct: React.FC<SelectProps> = ({
           value={selectedOption}
           onChange={(e) => {
             setSelectedOption(e.target.value);
-            if (e.target.value == '0') {
+            if (e.target.value == "0") {
               sError(true);
             } else {
-                sError(false)
+              sError(false);
             }
             changeTextColor();
           }}
@@ -49,11 +49,7 @@ const SelectProduct: React.FC<SelectProps> = ({
             {placeholder}
           </option>
           {options.map((option) => (
-            <option
-              key={option.id}
-              value={option.id}
-              className="text-dark-6"
-            >
+            <option key={option.id} value={option.id} className="text-dark-6">
               {option.name}
             </option>
           ))}
@@ -79,4 +75,4 @@ const SelectProduct: React.FC<SelectProps> = ({
   );
 };
 
-export default SelectProduct;
+export default SelectSaleman;

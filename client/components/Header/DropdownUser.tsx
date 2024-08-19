@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import { useSession } from "next-auth/react";
+import { signOut } from 'next-auth/react'
+
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,7 +34,7 @@ const DropdownUser = () => {
             </span>
 
             <span className="flex items-center gap-2 font-medium text-dark dark:text-dark-6">
-              <span className="hidden lg:block">Jhon Smith</span>
+              <span className="hidden lg:block">{session.user.name}</span>
 
               <svg
                 className={`fill-current duration-200 ease-in ${dropdownOpen && "rotate-180"}`}
@@ -76,10 +78,10 @@ const DropdownUser = () => {
 
                 <span className="block">
                   <span className="block font-medium text-dark dark:text-white">
-                    Jhon Smith
+                  {session.user.name}
                   </span>
                   <span className="block font-medium text-dark-5 dark:text-dark-6">
-                    jonson@nextadmin.com
+                  {session.user.email}
                   </span>
                 </span>
               </div>
@@ -145,7 +147,7 @@ const DropdownUser = () => {
                 </li>
               </ul>
               <div className="p-2.5">
-                <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base">
+                <button onClick={() => signOut()} className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base">
                   <svg
                     className="fill-current"
                     width="18"

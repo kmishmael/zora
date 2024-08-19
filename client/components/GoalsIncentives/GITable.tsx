@@ -1,5 +1,3 @@
-'use client';
-import { BRAND } from "@/types/brand";
 import {
   Card,
   CardHeader,
@@ -26,58 +24,22 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
-import { DashboardData } from "@/types/dashboard";
+import { PerformanceGoals } from "@/types/performance";
+import Link from "next/link";
+import { PencilIcon } from "@heroicons/react/24/outline";
+import DeletePerformanceGoal from "./DeleteGI";
 
-const brandData: BRAND[] = [
-  {
-    logo: "/images/brand/brand-01.svg",
-    name: "Google",
-    visitors: 3.5,
-    revenues: "5,768",
-    sales: 590,
-    conversion: 4.8,
-  },
-  {
-    logo: "/images/brand/brand-02.svg",
-    name: "X.com",
-    visitors: 2.2,
-    revenues: "4,635",
-    sales: 467,
-    conversion: 4.3,
-  },
-  {
-    logo: "/images/brand/brand-03.svg",
-    name: "Github",
-    visitors: 2.1,
-    revenues: "4,290",
-    sales: 420,
-    conversion: 3.7,
-  },
-  {
-    logo: "/images/brand/brand-04.svg",
-    name: "Vimeo",
-    visitors: 1.5,
-    revenues: "3,580",
-    sales: 389,
-    conversion: 2.5,
-  },
-  {
-    logo: "/images/brand/brand-05.svg",
-    name: "Facebook",
-    visitors: 1.2,
-    revenues: "2,740",
-    sales: 230,
-    conversion: 1.9,
-  },
-];
 
-const SalesmenPerformance = ({data}: {data: DashboardData}) => {
+const PerformanceTable = ({
+  performanceData,
+}: {
+  performanceData: PerformanceGoals;
+}) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">
-          Salesmen Performance
+          Goals & Incentives
         </CardTitle>
         <div className="flex items-center gap-2">
           <DropdownMenu>
@@ -91,9 +53,9 @@ const SalesmenPerformance = ({data}: {data: DashboardData}) => {
               <DropdownMenuLabel>Filter by</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem checked>
-                Branch
+                Salesperson
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Time Period</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Start Date</DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem>Sales Target</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -126,45 +88,79 @@ const SalesmenPerformance = ({data}: {data: DashboardData}) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Salesman</TableHead>
-              <TableHead>Branch</TableHead>
-              <TableHead>Total Sales</TableHead>
-              <TableHead>Sales Target</TableHead>
-              <TableHead>Performance</TableHead>
+              <TableHead>Salesperson</TableHead>
+              <TableHead>Target Sales</TableHead>
+              <TableHead>Achieved Sales</TableHead>
+              <TableHead>Incentive Amount</TableHead>
+              <TableHead>Start Date</TableHead>
+              <TableHead>End Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-
-            {data.salesmenPerformance.map(p => (
-              <TableRow key={p.branch_name}>
-              <TableCell className="font-medium">{p.salesman}</TableCell>
-              <TableCell>{p.branch_name}</TableCell>
-              <TableCell>{p.total_sales}</TableCell>
-              <TableCell>{p.sales_target}</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs">{Math.floor((p.total_sales / p.sales_target) * 100)}%</div>
-                  <Progress value={Math.floor((p.total_sales / p.sales_target) * 100)} />
-                </div>
-              </TableCell>
-            </TableRow>
+            {performanceData.performance_goals.map((goal) => (
+              <TableRow key={goal.id}>
+                <TableCell className="font-medium">{goal.user_name}</TableCell>
+                <TableCell>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "KES",
+                  }).format(goal.target_sales)}
+                </TableCell>
+                <TableCell>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "KES",
+                  }).format(goal.achieved_sales)}
+                </TableCell>
+                <TableCell>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "KES",
+                  }).format(goal.incentive_amount)}
+                </TableCell>
+                <TableCell>
+                  {new Date(goal.start_date).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </TableCell>
+                <TableCell>
+                  {new Date(goal.end_date).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </TableCell>
+                <TableCell>
+                  <div className="col-span-1 flex items-center">
+                    <div className="flex justify-end gap-3">
+                      <Link
+                        href={`#`}
+                        className="rounded-md border p-2 hover:bg-gray-100"
+                      >
+                        <PencilIcon className="w-5" />
+                      </Link>
+                      <DeletePerformanceGoal id={goal.id} />
+                    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
             ))}
-            
-            
           </TableBody>
         </Table>
       </CardContent>
       <CardFooter>
-        {/* <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong>
-          salesmen
-        </div> */}
+        <div className="text-xs text-muted-foreground">
+          Showing <strong>1-10</strong> of{" "}
+          <strong>{performanceData.total}</strong> salesmen
+        </div>
       </CardFooter>
     </Card>
   );
 };
 
-export default SalesmenPerformance;
+export default PerformanceTable;
 
 function ListOrderedIcon(props: any) {
   return (

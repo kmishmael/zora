@@ -1,3 +1,5 @@
+"use client";
+
 import { BRAND } from "@/types/brand";
 import {
   Card,
@@ -26,6 +28,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
+import { DashboardData } from "@/types/dashboard";
 
 const brandData: BRAND[] = [
   {
@@ -70,13 +73,11 @@ const brandData: BRAND[] = [
   },
 ];
 
-const LeaderBoardPerformance = () => {
+const LeaderBoardPerformance = ({ data }: { data: DashboardData }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">
-          Salesmen Performance
-        </CardTitle>
+        <CardTitle className="text-sm font-medium">Leaderboard</CardTitle>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -124,74 +125,21 @@ const LeaderBoardPerformance = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Rank</TableHead>
               <TableHead>Salesman</TableHead>
               <TableHead>Branch</TableHead>
               <TableHead>Total Sales</TableHead>
-              <TableHead>Sales Target</TableHead>
-              <TableHead>Performance</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">John Doe</TableCell>
-              <TableCell>New York</TableCell>
-              <TableCell>$250,000</TableCell>
-              <TableCell>$300,000</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs">83%</div>
-                  <Progress value={83} aria-label="83% of target achieved" />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Jane Smith</TableCell>
-              <TableCell>Los Angeles</TableCell>
-              <TableCell>$180,000</TableCell>
-              <TableCell>$200,000</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs">90%</div>
-                  <Progress value={90} aria-label="90% of target achieved" />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Michael Johnson</TableCell>
-              <TableCell>Chicago</TableCell>
-              <TableCell>$220,000</TableCell>
-              <TableCell>$250,000</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs">88%</div>
-                  <Progress value={88} aria-label="88% of target achieved" />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Emily Davis</TableCell>
-              <TableCell>Miami</TableCell>
-              <TableCell>$190,000</TableCell>
-              <TableCell>$180,000</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs">106%</div>
-                  <Progress value={106} aria-label="106% of target achieved" />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">David Wilson</TableCell>
-              <TableCell>Seattle</TableCell>
-              <TableCell>$160,000</TableCell>
-              <TableCell>$175,000</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="text-xs">91%</div>
-                  <Progress value={91} aria-label="91% of target achieved" />
-                </div>
-              </TableCell>
-            </TableRow>
+            {data.salesmenLeaderboard.map((p) => (
+              <TableRow key={p.branch_name}>
+                <TableCell className="font-medium">{p.rank}</TableCell>
+                <TableCell>{p.salesman}</TableCell>
+                <TableCell>{p.branch_name}</TableCell>
+                <TableCell>{p.total_sales}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>

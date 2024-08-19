@@ -1,7 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials"
 import NextAuth from 'next-auth';
 
-
 export const {
     handlers: { GET, POST },
     auth,
@@ -11,31 +10,28 @@ export const {
     },
     callbacks: {
         async jwt({ token, user }) {
+
             if (user) {
                 token.accessToken = (user as any).accessToken;
+                token.role = (user as any).role;
+                token.id = (user as any).id;
             }
             return token;
         },
         async session({ session, token }) {
-            console.log("SESSION => ", session)
-            console.log("TOKEN => ", token)
-            session.accessToken = token.token
-            //session.user.id = token.userId as string;
-            //session.user.email = token.email as string;
-            //session.user.name = token.name;
-            //session.accessToken = token.accessToken as string;
+            session.accessToken = token.accessToken as string;
+            session.user.role = token.role as string;
+            session.user.email = token.email as string;
+            session.user.name = token.name as string;
+            session.user.id = token.id;
             return session;
         },
-
         async signIn({ user, account, profile, email, credentials }) {
-
             if (account?.provider == 'credentials') {
                 return true
             }
-
             return false
         },
-
     },
     providers: [
         CredentialsProvider({
@@ -47,17 +43,18 @@ export const {
                     },
                     body: JSON.stringify(credentials),
                 })
-
                 if (!authResponse.ok) {
                     return null
                 }
 
                 const user = await authResponse.json()
-                return user
-            },
-            credentials: {
-                email: { label: 'Email', type: 'email' },
-                password: { label: 'Password', type: 'password' },
+                return {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                    accessToken: user.token,
+                };
             },
         }),
 

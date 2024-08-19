@@ -175,7 +175,6 @@ class Feedback(db.Model):
             'timestamp': self.timestamp.isoformat(),
         }
 
-
 class Commission(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, db.ForeignKey('user.id'), nullable=False)
@@ -205,16 +204,17 @@ class Sale(db.Model):
     id = Column(Integer, primary_key=True)
     product_id = Column(Integer, db.ForeignKey('product.id'), nullable=False)
     user_id = Column(Integer, db.ForeignKey('user.id'), nullable=False)
-    branch_id = Column(Integer, db.ForeignKey('branch.id'), nullable=False)
+    customer_name = Column(Text, nullable=False)
+    customer_email = Column(Text, nullable=True)
     quantity = Column(Integer, nullable=False)
+    unit_price = Column(Float, nullable=False)
+    branch_id = Column(db.Integer, db.ForeignKey('branch.id'), nullable=True, default=1)
     total_price = Column(Float, nullable=False)
     timestamp = Column(DateTime, nullable=False,
                        default=db.func.current_timestamp())
-
     user = relationship('User', back_populates='sales')
     product = relationship('Product', back_populates='sales')
     branch = relationship('Branch', back_populates='sales')
-    # One-to-one relationship
     feedback = relationship('Feedback', back_populates='sale', uselist=False)
     commissions = relationship('Commission', back_populates='sale')
 
@@ -226,6 +226,9 @@ class Sale(db.Model):
             'branch_id': self.branch_id,
             'quantity': self.quantity,
             'total_price': self.total_price,
+            'customer_name': self.customer_name,
+            'customer_email': self.customer_email,
+            'unit_price': self.unit_price,
             # Convert datetime to ISO format string
             'timestamp': self.timestamp.isoformat(),
             # Include related feedback
@@ -243,6 +246,7 @@ class PerformanceGoal(db.Model):
     achieved_sales = Column(Integer, default=0)
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
+    incentive_amount = Column(Float, default=0)
 
     incentives = relationship('Incentive', back_populates='performance_goal')
     user = relationship('User', back_populates='performance_goals')
@@ -251,10 +255,12 @@ class PerformanceGoal(db.Model):
         return {
             'id': self.id,
             'user_id': self.user_id,
+            'user_name': self.user.name,
             'target_sales': self.target_sales,
             'achieved_sales': self.achieved_sales,
             'start_date': self.start_date,
-            'end_date': self.end_date.isoformat()
+            'end_date': self.end_date.isoformat(),
+            'incentive_amount': self.incentive_amount
         }
 
     def __repr__(self):

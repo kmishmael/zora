@@ -13,7 +13,7 @@ export default async function RegisterForm() {
     <>
       <DefaultLayout>
         <div className="mx-auto w-full max-w-[1080px]">
-          <Breadcrumb pageName="Create New Branch" />
+          <Breadcrumb pageName="Register New Sale" />
           <br />
           <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
             <Suspense

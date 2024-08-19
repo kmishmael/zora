@@ -6,7 +6,8 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(async (config: any) => {
-    const session = await auth()
+   // const session = await auth()
+   // console.log("AIXO => ", session)
 
     config.headers['Access-Control-Allow-Credentials'] = true;
     return config
