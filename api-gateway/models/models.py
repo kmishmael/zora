@@ -155,7 +155,7 @@ class Incentive(db.Model):
 class Feedback(db.Model):
     id = Column(Integer, primary_key=True)
     sale_id = Column(Integer, db.ForeignKey('sale.id'), nullable=False)
-    comment = Column(Text, nullable=False)
+    comment = Column(Text, nullable=True)
     rating = Column(Integer, nullable=False)
     timestamp = Column(DateTime, nullable=False,
                        default=db.func.current_timestamp())

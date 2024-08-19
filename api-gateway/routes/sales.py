@@ -57,8 +57,10 @@ def get_sales():
 
 @sales_bp.route('/sales/<int:id>', methods=['GET'])
 def get_sale(id):
+    print("I am gere")
     sale = Sale.query.get_or_404(id)
-    return jsonify(sale.to_dict())
+    print(sale)
+    return jsonify(sale.to_dict()), 200
 
 
 @sales_bp.route('/sales', methods=['POST'])
@@ -650,6 +652,25 @@ def get_salesman_data(user_id):
         for ct in commission_trend
     ]
 
+    earned_incentives_subquery = db.session.query(
+        Incentive.performance_goal_id).subquery()
+
+    # Query to sum up all potential incentives that have not been earned yet
+    total_potential_incentives = db.session.query(db.func.sum(PerformanceGoal.incentive_amount)) \
+        .filter(PerformanceGoal.user_id == user_id) \
+        .filter(PerformanceGoal.id.notin_(earned_incentives_subquery)) \
+        .scalar()
+
+    # total_earned_incentives = db.session.query(db.func.sum(Incentive.amount)) \
+    #   .join(PerformanceGoal) \
+    #  .filter(PerformanceGoal.user_id == user_id) \
+    # .scalar()
+
+    # total_potential_incentives = db.session.query(db.func.sum(PerformanceGoal.incentive_amount)).filter(PerformanceGoal.user_id == user_id) \
+    #     .scalar()
+    total_earned_incentives = db.session.query(db.func.sum(Incentive.amount)).join(PerformanceGoal).filter(PerformanceGoal.user_id == user_id) \
+        .scalar()
+
     # Combine all data into a single response
     response = {
         "total_sales": total_sales,
@@ -657,7 +678,9 @@ def get_salesman_data(user_id):
         "total_commission": total_commission,
         "incentives": incentives_list,
         "sales_trend": sales_trend_list,
-        "commission_trend": commission_trend_list
+        "commission_trend": commission_trend_list,
+        "total_potential_incentives": total_potential_incentives,
+        "total_earned_incentives": total_earned_incentives
     }
 
     return jsonify(response), 201
