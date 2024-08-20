@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Product } from "@/types/product";
 import { useSession } from "next-auth/react";
 import { Sale } from "@/types/sales";
+import { User } from "@/types/user";
 
 type FormInputs = {
   name: string;
@@ -35,8 +36,11 @@ export default function SalesCreate({ products }: { products: Product[] }) {
     let selectedProduct = products.filter(
       (product: Product) => product.id == selectedOption,
     )[0];
+    const res = (await api.get<User>(`/users/${session?.user.id}`)).data
+
     let uploadData = {
       customer_name: data.name,
+      branch_id: res.branch_id,
       user_id: session?.user.id,
       customer_email: data.email,
       quantity: data.quantity,

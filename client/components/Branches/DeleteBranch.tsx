@@ -10,11 +10,11 @@ export default function DeleteBranch({ id }: { id: number }) {
   const router = useRouter();
 
   async function handleBranchDelete(id: number) {
-    const res = await api.delete(`/products/${id}`);
+    const res = await api.delete(`/branches/${id}`);
     if (res.status == 204) {
       // Add a toast here
       toast({
-        description: "Product deleted successfully.",
+        description: "Branch deleted successfully.",
       });
       router.refresh();
     }

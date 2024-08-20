@@ -25,7 +25,7 @@ export default function GlanceData({data}: {data: DashboardData}) {
             }).format(data.totalSales)}
             </div>
             <p className="text-xs text-muted-foreground">
-              +{data.percentageChange}% from last month
+              +{data.percentageChange.toFixed(0)}% from last month
             </p>
           </CardContent>
         </Card>
@@ -52,7 +52,7 @@ export default function GlanceData({data}: {data: DashboardData}) {
             <BarChartIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+{data.percentageChange}%</div>
+            <div className="text-2xl font-bold">+{data.percentageChange.toFixed(1)}%</div>
             <p className="text-xs text-muted-foreground">from last month</p>
           </CardContent>
         </Card>

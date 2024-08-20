@@ -65,12 +65,6 @@ def login():
 
     if user and user.check_password(password):
         token = generate_token(user)
-        print({
-            'id': user.id,
-            'name': user.name,
-            'email': user.email,
-            'role': user.role,
-            'token': token})
         return jsonify({
             'id': user.id,
             'name': user.name,

@@ -1,6 +1,6 @@
 from flask import request
 from flask import Blueprint, request, jsonify
-from sqlalchemy import and_
+from sqlalchemy import and_, extract
 from models.models import Commission, Feedback, Incentive, PerformanceGoal, Sale, User, Product, Branch
 from db.database import db
 from datetime import datetime, timedelta
@@ -71,6 +71,7 @@ def create_sale():
         customer_name=data['customer_name'],
         customer_email=data['customer_email'],
         user_id=data['user_id'],
+        branch_id=data['branch_id'],
         quantity=data['quantity'],
         total_price=data['total_price'],
         unit_price=data['unit_price']
@@ -383,10 +384,11 @@ def get_sales_dashbored():
 
     # Sales Trend (using DATE() to truncate timestamp)
     sales_trend = db.session.query(
-        db.func.date(Sale.timestamp).label('day'),
+        #db.func.date("month",Sale.timestamp).label('day'),
+        extract('month', Sale.timestamp).label('day'),
         db.func.sum(Sale.total_price).label('total_sales')
     ).select_from(Sale)\
-        .filter(Sale.timestamp >= current_period_start)\
+        .filter(Sale.timestamp >= (datetime.now() - timedelta(weeks=53)))\
         .group_by('day').order_by('day').all()
 
     # Prepare the response
@@ -426,7 +428,7 @@ def get_sales_dashbored():
             for p in top_selling_products
         ],
         "salesTrend": [
-            {"date": st.day.isoformat(), "total_sales": st.total_sales}
+            {"date": st.day, "total_sales": st.total_sales}
             for st in sales_trend
         ]
     }

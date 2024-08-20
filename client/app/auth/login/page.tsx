@@ -2,12 +2,21 @@ import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Signin from "@/components/Auth/Signin";
 import Link from "next/link";
+import { auth } from "@/lib/auth/auth";
+import { redirect } from "next/navigation";
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: { error: string | undefined };
 }) {
+
+  const session = await auth()
+
+  if(session) {
+    redirect("/")
+  }
+
   return (
     <>
       {/* <Breadcrumb pageName="Sign In" /> */}

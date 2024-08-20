@@ -61,7 +61,7 @@ export default async function SalesmenDashboard() {
               </div>
               <div className="text-xs text-muted-foreground">
                 {Math.floor(
-                  (dashboardData.sales_target / dashboardData.total_sales) *
+                  (dashboardData.total_sales / dashboardData.sales_target) *
                     100,
                 )}
                 % achieved

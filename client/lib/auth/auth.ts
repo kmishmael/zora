@@ -43,7 +43,7 @@ export const {
                     },
                     body: JSON.stringify(credentials),
                 })
-                if (!authResponse.ok) {
+                if (authResponse.status == 401) {
                     return null
                 }
 

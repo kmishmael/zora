@@ -21,13 +21,13 @@ class User(db.Model):
     branch_id = Column(db.Integer, db.ForeignKey('branch.id'), nullable=True)
 
     branch = relationship('Branch', back_populates='users')
-    sales = relationship('Sale', back_populates='user')
-    performance_goals = relationship('PerformanceGoal', back_populates='user')
-    commissions = relationship('Commission', back_populates='user')
-    # Added audit_logs relationship
+    sales = relationship('Sale', back_populates='user', cascade='all, delete-orphan')
+    performance_goals = relationship('PerformanceGoal', back_populates='user',cascade='all, delete-orphan')
+    commissions = relationship('Commission', back_populates='user', cascade='all, delete-orphan')
+
     audit_logs = relationship('AuditLog', back_populates='user')
 
-    # feedback = relationship('Feedback', back_populates='user')
+    #feedback = relationship('Feedback', back_populates='user')
 
     def __init__(self, name, email, password, role):
         self.email = email
@@ -59,8 +59,8 @@ class Product(db.Model):
     description = Column(Text, nullable=True)
     category_id = Column(Integer, db.ForeignKey('category.id'), nullable=False)
 
-    sales = relationship('Sale', back_populates='product')
-    images = relationship('ProductImage', back_populates='product')
+    sales = relationship('Sale', back_populates='product', cascade='all, delete-orphan')
+    images = relationship('ProductImage', back_populates='product', cascade='all, delete-orphan')
     category = relationship('Category', back_populates='products')
 
     def __repr__(self):
@@ -133,7 +133,7 @@ class Category(db.Model):
 class Incentive(db.Model):
     id = Column(Integer, primary_key=True)
     performance_goal_id = Column(Integer, db.ForeignKey(
-        'performance_goal.id'), nullable=False)
+        'performance_goal.id', ondelete='CASCADE'), nullable=False)
     description = Column(Text, nullable=False)
     amount = Column(Float, nullable=False)
 
@@ -154,7 +154,7 @@ class Incentive(db.Model):
 
 class Feedback(db.Model):
     id = Column(Integer, primary_key=True)
-    sale_id = Column(Integer, db.ForeignKey('sale.id'), nullable=False)
+    sale_id = Column(Integer, db.ForeignKey('sale.id', ondelete='CASCADE'), nullable=True)
     comment = Column(Text, nullable=True)
     rating = Column(Integer, nullable=False)
     timestamp = Column(DateTime, nullable=False,
@@ -174,6 +174,7 @@ class Feedback(db.Model):
             # Convert datetime to ISO format string
             'timestamp': self.timestamp.isoformat(),
         }
+
 
 class Commission(db.Model):
     id = Column(Integer, primary_key=True)
@@ -208,7 +209,8 @@ class Sale(db.Model):
     customer_email = Column(Text, nullable=True)
     quantity = Column(Integer, nullable=False)
     unit_price = Column(Float, nullable=False)
-    branch_id = Column(db.Integer, db.ForeignKey('branch.id'), nullable=True, default=1)
+    branch_id = Column(db.Integer, db.ForeignKey(
+        'branch.id'), nullable=True, default=1)
     total_price = Column(Float, nullable=False)
     timestamp = Column(DateTime, nullable=False,
                        default=db.func.current_timestamp())
@@ -216,7 +218,7 @@ class Sale(db.Model):
     product = relationship('Product', back_populates='sales')
     branch = relationship('Branch', back_populates='sales')
     feedback = relationship('Feedback', back_populates='sale', uselist=False)
-    commissions = relationship('Commission', back_populates='sale')
+    commissions = relationship('Commission', back_populates='sale', cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -241,7 +243,7 @@ class Sale(db.Model):
 
 class PerformanceGoal(db.Model):
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = Column(Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     target_sales = Column(Integer, nullable=False)
     achieved_sales = Column(Integer, default=0)
     start_date = Column(DateTime, nullable=False)

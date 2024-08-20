@@ -32,7 +32,7 @@ export default function RatingData({ salesData }: { salesData: Sale }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center border border-red-700 p-6">
+    <div className="flex min-h-screen flex-col items-center justify-center p-6">
       <Link href="/" className="text-4xl font-bold text-blue-600">
         Zora System
       </Link>

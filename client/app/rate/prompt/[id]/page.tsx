@@ -14,6 +14,9 @@ export default function Page({ params }: { params: { id: number } }) {
         <Suspense fallback={<Loader />}>
           <Prompt id={params.id} />
         </Suspense>
+        <br />
+        <br />
+        <a href="/" className="underline text-primary font-medium">Go back</a>
       </div>
     </>
   );
