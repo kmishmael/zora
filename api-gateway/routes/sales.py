@@ -352,14 +352,26 @@ def get_sales_dashbored():
     ).join(Sale, Branch.id == Sale.branch_id).join(User, Branch.id == User.branch_id).join(PerformanceGoal, User.id == PerformanceGoal.user_id).filter(Sale.timestamp >= current_period_start).group_by(Branch.name).all()
 
     # Salesmen Leaderboard
+    # salesmen_leaderboard = db.session.query(
+    #     User.name,
+    #     Branch.name.label('branch_name'),
+    #     db.func.sum(Sale.total_price).label('total_sales')
+    # ).select_from(Sale).join(User).join(Branch)\
+    #     .filter(Sale.timestamp >= current_period_start)\
+    #     .group_by(User.name, Branch.name)\
+    #     .order_by(db.desc('total_sales')).limit(10).all()
+
     salesmen_leaderboard = db.session.query(
-        User.name,
-        Branch.name.label('branch_name'),
-        db.func.sum(Sale.total_price).label('total_sales')
-    ).select_from(Sale).join(User).join(Branch)\
-        .filter(Sale.timestamp >= current_period_start)\
-        .group_by(User.name, Branch.name)\
-        .order_by(db.desc('total_sales')).limit(10).all()
+    User.name,
+    Branch.name.label('branch_name'),
+    db.func.sum(Sale.total_price).label('total_sales'),
+    db.func.avg(Feedback.rating).label('average_rating')  # Calculate average rating
+).select_from(Sale)\
+    .join(User)\
+    .join(Branch)\
+    .outerjoin(Feedback, Sale.id == Feedback.sale_id).filter(Sale.timestamp >= current_period_start)\
+    .group_by(User.name, Branch.name)\
+    .order_by(db.desc('total_sales')).limit(10).all()
 
     # Top Selling Products
     top_selling_products = db.session.query(
@@ -405,7 +417,8 @@ def get_sales_dashbored():
         ],
         "salesmenLeaderboard": [
             {"rank": idx + 1, "salesman": s.name,
-                "branch_name": s.branch_name, "total_sales": s.total_sales}
+                "branch_name": s.branch_name, "total_sales": s.total_sales,
+                "average_rating": s.average_rating}
             for idx, s in enumerate(salesmen_leaderboard)
         ],
         "topSellingProducts": [
@@ -670,10 +683,14 @@ def get_salesman_data(user_id):
     #     .scalar()
     total_earned_incentives = db.session.query(db.func.sum(Incentive.amount)).join(PerformanceGoal).filter(PerformanceGoal.user_id == user_id) \
         .scalar()
+    
+    average_rating = db.session.query(db.func.avg(Feedback.rating)).join(Sale).filter(Sale.user_id == user_id).scalar() or 0
+
 
     # Combine all data into a single response
     response = {
         "total_sales": total_sales,
+        "average_rating": average_rating,
         "sales_target": sales_target,
         "total_commission": total_commission,
         "incentives": incentives_list,
