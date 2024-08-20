@@ -1,6 +1,16 @@
 # Zora
 
 This is a sales management system. The fronted is written in NextJS, with Typescript while the backend is written in Flask, Python.
+Here are some gallery views of how it looks like:
+### Manager View
+![alt text](assets/image.png)
+![alt text](assets/image-2.png)
+
+#### Salesperson View
+![alt text](assets/image-3.png)
+
+#### Customer Feedback System
+![alt text](assets/image-4.png)
 
 To run it
 ## Backend

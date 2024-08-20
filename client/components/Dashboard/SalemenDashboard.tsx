@@ -33,7 +33,7 @@ export default async function SalesmenDashboard() {
     <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
       <Card className="col-span-1 lg:col-span-2">
         <CardHeader>
-          <CardTitle>Salesman Dashboard</CardTitle>
+          <CardTitle>Welcome <span className="text-primary">{session.user.name.split(" ")[0]}</span></CardTitle>
           <CardDescription>
             Track your sales, commissions, and incentives
           </CardDescription>
