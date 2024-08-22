@@ -1,9 +1,5 @@
 import api from "@/lib/axios/private";
-import { PencilIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import DeleteBranch from "./DeleteGI";
 import { PerformanceGoals } from "@/types/performance";
-import DeleteGI from "./DeleteGI";
 import PerformanceTable from "./GITable";
 
 export default async function GIDashboard() {

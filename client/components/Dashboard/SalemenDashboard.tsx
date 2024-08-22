@@ -11,7 +11,6 @@ import Link from "next/link";
 import { LinechartChart } from "./LineChart";
 import { SalesDashboardData } from "@/types/dashboard";
 import api from "@/lib/axios/private";
-import { useSession } from "next-auth/react";
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
 

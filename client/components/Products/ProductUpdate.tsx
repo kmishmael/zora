@@ -1,7 +1,6 @@
 "use client";
 
 import { Categories } from "@/types/category";
-import InputGroup from "../FormElements/InputGroup";
 import { useState } from "react";
 import SelectOption from "../FormElements/select";
 import { UploadDropzone } from "@/lib/uploadthing";

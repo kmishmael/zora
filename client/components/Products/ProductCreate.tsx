@@ -1,8 +1,6 @@
 "use client";
 
 import { Categories } from "@/types/category";
-import InputGroup from "../FormElements/InputGroup";
-import { useState } from "react";
 import SelectOption from "../FormElements/select";
 import { UploadDropzone } from "@/lib/uploadthing";
 import Image from "next/image";
@@ -10,6 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import api from "@/lib/axios/private";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
+import { useState } from "react";
 
 type FormInputs = {
   name: string;

@@ -27,7 +27,6 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
 import { DashboardData } from "@/types/dashboard";
 
 const brandData: BRAND[] = [
