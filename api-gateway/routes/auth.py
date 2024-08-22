@@ -11,16 +11,6 @@ auth_bp = Blueprint('auth', __name__)
 SECRET_KEY = 'HDHIEUOWUOUNV=A'
 
 
-def generate_token(user):
-    payload = {
-        'user_id': user.id,
-        'name': user.name,
-        'email': user.email,
-        'exp': datetime.now() + timedelta(hours=24)  # Token expiration time
-    }
-    return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
-
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -54,6 +44,15 @@ def signup():
 
     return jsonify({'message': 'User registered successfully'}), 201
 
+
+def generate_token(user):
+    payload = {
+        'user_id': user.id,
+        'name': user.name,
+        'email': user.email,
+        'exp': datetime.now() + timedelta(hours=24)  # Token expiration time
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
 @auth_bp.route("/login", methods=['POST'])
 def login():

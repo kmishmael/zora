@@ -11,6 +11,7 @@ class UserRole(enum.Enum):
     BASIC = "basic"
 
 
+
 class User(db.Model):
     id = Column(db.Integer, primary_key=True)
     name = Column(String(80), unique=False, nullable=False)
@@ -27,7 +28,6 @@ class User(db.Model):
 
     audit_logs = relationship('AuditLog', back_populates='user')
 
-    #feedback = relationship('Feedback', back_populates='user')
 
     def __init__(self, name, email, password, role):
         self.email = email

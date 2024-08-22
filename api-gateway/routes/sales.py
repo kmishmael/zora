@@ -67,34 +67,16 @@ def get_sale(id):
 def create_sale():
     data = request.json
     new_sale = Sale(
-        product_id=data['product_id'],
-        customer_name=data['customer_name'],
-        customer_email=data['customer_email'],
-        user_id=data['user_id'],
-        branch_id=data['branch_id'],
-        quantity=data['quantity'],
-        total_price=data['total_price'],
-        unit_price=data['unit_price']
-    )
+        product_id=data['product_id'],customer_name=data['customer_name'],customer_email=data['customer_email'],user_id=data['user_id'],branch_id=data['branch_id'],quantity=data['quantity'],total_price=data['total_price'],unit_price=data['unit_price'])
     db.session.add(new_sale)
     db.session.commit()
 
     commission_rate = 0.05
     commission_amount = new_sale.total_price * commission_rate
 
-    new_commission = Commission(
-        user_id=new_sale.user_id,
-        sale_id=new_sale.id,
-        amount=commission_amount
-    )
+    new_commission = Commission(user_id=new_sale.user_id,sale_id=new_sale.id,amount=commission_amount)
     db.session.add(new_commission)
-    performance_goal = PerformanceGoal.query.filter(
-        and_(
-            PerformanceGoal.user_id == new_sale.user_id,
-            PerformanceGoal.start_date <= new_sale.timestamp,
-            PerformanceGoal.end_date >= new_sale.timestamp
-        )
-    ).first()
+    performance_goal = PerformanceGoal.query.filter(and_(PerformanceGoal.user_id == new_sale.user_id,PerformanceGoal.start_date <= new_sale.timestamp,PerformanceGoal.end_date >= new_sale.timestamp)).first()
 
     if performance_goal:
         performance_goal.achieved_sales += new_sale.total_price
